@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-# symfony-todo-app
-=======
+
 # 📝 Todo Project
 
 A Symfony 7 application running in a Docker environment, with Composer support and Doctrine migrations.  
