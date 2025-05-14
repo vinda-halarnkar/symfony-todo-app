@@ -24,7 +24,7 @@ Make sure the following are installed on your machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone git@github.com:vinda-halarnkar/symfony-todo.git
+git clone git@github.com:vinda-halarnkar/symfony-todo-app.git
 cd symfony-todo
 ```
 
@@ -42,7 +42,7 @@ docker exec -it symfony_php composer install
 
 ### 4. Set Up Environment Variables
 ```bash
-cp .env .env.local
+cp .env .env.example
 ```
 
 ### 5. Database & Migrations
