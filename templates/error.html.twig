@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm p-4">
+            <h2 class="text-center mb-4">Error</h2>
+            <div>
+                {% for label, messages in app.flashes %}
+                    <div class="mb-20">
+                        {% for message in messages %}
+                            <div class="pt-15 br-5 {{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}   
+            </div> 
+    </div>
+</div>
+{% endblock %}

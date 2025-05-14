@@ -1,0 +1,41 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+/bin
+###< symfony/framework-bundle ###
+
+
+### Symfony ###
+/var/
+!/var/.gitkeep
+
+.env.*.local
+.env.test
+.env 
+
+# Ignore Symfony profiler debug toolbar config
+/.web-server-pid
+
+### Logs, caches, and temp files ###
+*.log
+*.cache
+
+### PHPUnit ###
+/phpunit.result.cache
+
+### IDEs and editor junk ###
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+
+### OS-specific ###
+.DS_Store
+Thumbs.db

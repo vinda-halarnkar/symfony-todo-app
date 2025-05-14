@@ -1,0 +1,189 @@
+{% extends 'base.html.twig' %}
+{% block title %}Todo
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div
+			class="row vh-100">
+			<!-- Left Column -->
+			<div class="col-md-3 bg-light p-4 border-end">
+				<h4>Welcome,
+					<span id="firstname">John</span>
+				</h4>
+				<button class="btn btn-primary my-3" data-bs-toggle="collapse" data-bs-target="#createListForm">
+					Create List
+				</button>
+
+				<!-- Create List Form -->
+				<div id="createListForm" class="collapse">					
+					{{ form_start(listForm, {
+						attr: { id: 'listForm' },
+						action: path('create_list'),
+						method: 'POST'
+					}) }}
+						<div class="mb-3">
+							{{ form_row(listForm.name, { attr: { class: 'form-control', placeholder: 'List name' } }) }}
+						</div>
+						<button type="submit" class="btn btn-success btn-sm">Add</button>
+					{{ form_end(listForm) }}
+				</div>
+
+				<hr>
+				<!-- Lists Display -->
+				<h6>Your Lists:</h6>
+				<ul class="list-group" id="listContainer">
+					{% for list in lists %}						
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<a href="{{ path('app_todo') }}/{{list.id}}" class="text-decoration-none text-dark">
+								{{ list.name }}
+							</a>
+							<a href="{{ path('delete_list', { listId: list.id }) }}" title="Delete" onclick="return confirm('Are you sure you want to delete this list?')">
+								<i class="bi bi-trash text-danger" role="button"></i>
+							</a>
+						</li>
+					{% else %}
+						<li class="list-group-item text-muted">No lists found.</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<!-- Right Column -->
+			<div class="col-md-9 p-4">
+				<div class="d-flex justify-content-end">
+				<label for="sortDropdown" class="mb-0 me-2">Sort by:</label>
+				<select id="sortDropdown" class="form-select w-auto mb-3 me-4">
+					<option value="name" {{ currentSort == 'name' ? 'selected' : '' }}>Name</option>
+					<option value="date" {{ currentSort == 'date' ? 'selected' : '' }}>Date</option>
+				</select>
+					<a href="/logout" class="btn btn-outline-danger mb-3">Logout</a>
+				</div>
+				
+				<!-- Selected List Items -->
+				<div>
+					{% if selectedListId %}
+						<h5>Items in:
+							<span id="currentListTitle">{{ selectedListName }}</span>
+						</h5>
+						<div class="col-md-9 pb-4">
+							<ul class="list-group" id="itemContainer">
+								{% for item in items %}
+									<li class="list-group-item d-flex justify-content-between align-items-center bg-light border rounded px-3 py-2 shadow-sm">
+										<span class="fw-medium" style="color: {{ item.color }}">{{ item.name }}</span>
+										<div>
+											<a class="mr-5 editItemLink_js" name="getElementById" href="#" data-bs-toggle="modal" 
+												data-bs-target="#editItemModal" title="Edit"
+												data-id="{{ item.id }}"
+												data-name="{{ item.name }}"
+												data-color="{{ item.color }}"
+												data-completed="{{ item.isCompleted ? 'true' : 'false' }}"
+												onclick="populateData(this)"
+												>
+												<i class="bi bi-pencil-square text-primary me-2" role="button"></i>
+											</a>
+											<a href="{{ path('complete_item', { itemId: item.id }) }}" title="Mark as Completed" onclick="return confirm('Are you sure you want to mark this item as completed?')">
+												<i class="bi bi-x-circle text-danger" role="button"></i>
+											</a>
+											<a class="ml-10 " href="{{ path('delete_item', { itemId: item.id }) }}" title="Delete" onclick="return confirm('Are you sure you want to delete this item from the list?')">
+												<i class="bi bi-trash text-danger pl-10" role="button"></i>
+											</a>
+										</div>
+									</li>
+									
+								{% else %}
+									<li class="list-group-item text-muted">No Items Added to the list.</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<button class="btn btn-secondary mb-2" data-bs-toggle="collapse" data-bs-target="#addItemForm">
+							Add Item
+						</button>
+						<!-- Add Item Form -->
+						<div id="addItemForm" class="collapse">						
+							{{ form_start(itemForm, {
+								attr: { id: 'itemForm' },
+								action: path('save_item', { listId: selectedListId }),
+								method: 'POST'
+							}) }}
+								<div class="mb-3">
+									{{ form_row(itemForm.name, { attr: { class: 'form-control', placeholder: 'Item name' } }) }}
+								</div>
+								<div class="mb-3">
+									{{ form_row(itemForm.color, { 
+										attr: { class: 'form-control form-control-color', type: 'color' } 
+									}) }}
+								</div>
+								<button type="submit" class="btn btn-success btn-sm">Add Item</button>
+							{{ form_end(itemForm) }}
+						</div>
+						<h5>Completed Items</h5>
+						<div class="col-md-9 pb-4">
+							<ul class="list-group" id="itemContainer">
+								{% for item in completedItems %}
+									<li class="list-group-item d-flex justify-content-between align-items-center bg-light border rounded px-3 py-2 shadow-sm bg-secondary-subtle text-muted">
+										<span class="fw-medium text-decoration-line-through">{{ item.name }}</span>
+
+									</li>
+								{% else %}
+									<li class="list-group-item text-muted">No items has been completed.</li>
+								{% endfor %}
+							</ul>
+						</div>						
+					{% else %}
+						<h5>Please select a list to view items</h5>
+					{% endif %}	
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<!-- Shared Edit Modal -->
+<div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="editItemForm" method="POST">
+					<input type="hidden" name="_token" value="{{ csrf_token('edit_item') }}">
+					<input type="text" name="name" id="editItemName" class="form-control mb-2" placeholder="Item name">
+					<input type="color" name="color" id="editItemColor" class="form-control form-control-color mb-2">
+					<div class="form-check">
+						<input type="checkbox" name="isCompleted" id="editItemCompleted" class="form-check-input">
+						<label for="editItemCompleted" class="form-check-label">Mark as complete</label>
+					</div>
+					<button type="submit" class="btn btn-success mt-3">Save</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  document.getElementById("sortDropdown").addEventListener("change", function () {
+    const sortValue = this.value;
+    const url = new URL(window.location.href);
+    url.searchParams.set("sort", sortValue);
+    window.location.href = url.toString();
+  });
+
+  function populateData(element) {
+	const id = element.dataset.id;
+    const name = element.dataset.name;
+    const color = element.dataset.color;
+    const completed = element.dataset.completed === 'true';
+
+	document.getElementById('editItemName').value = name;
+	document.getElementById('editItemColor').value = color;
+	document.getElementById('editItemCompleted').checked = completed;
+
+	var form = document.getElementById('editItemForm')
+	form.action = `/save-item/{{ selectedListId }}/` + id;
+
+  }
+  
+</script>
+{% endblock %}
