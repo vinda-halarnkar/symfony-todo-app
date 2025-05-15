@@ -71,13 +71,23 @@ final class TodoController extends AbstractController
     {
         $user = $this->getUser();
         $item = $this->todoService->initializeItem($listId, $itemId, $user);
+        if($itemId) {
+            $item->setName($request->request->get('name'));
+            $item->setColor($request->request->get('color'));
+            $item->setIsCompleted($request->request->getBoolean('isCompleted'));
 
-        $form = $this->createForm(ItemType::class, $item);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
             $this->todoService->saveItem($item);
+        } else {
+           
+            $form = $this->createForm(ItemType::class, $item);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->todoService->saveItem($item);
+            }
         }
+        
+
+        
 
         return $this->redirectToRoute('app_todo', ['listId' => $listId]);
     }

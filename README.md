@@ -26,21 +26,21 @@ git clone git@github.com:vinda-halarnkar/symfony-todo-app.git
 cd symfony-todo
 ```
 
-### 2. Build and Start Docker Containers
+### 2. Set Up Environment Variables
+```bash
+cp .env .env.example
+```
+
+### 3. Build and Start Docker Containers
 
 ```bash
 docker compose up --build
 ```
 
-### 3. Install PHP Dependencies with Composer
+### 4. Install PHP Dependencies with Composer
 
 ```bash
 docker exec -it symfony_php composer install
-```
-
-### 4. Set Up Environment Variables
-```bash
-cp .env .env.example
 ```
 
 ### 5. Database & Migrations
