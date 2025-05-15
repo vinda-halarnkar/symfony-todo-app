@@ -52,4 +52,12 @@ docker exec -it symfony_php bin/console doctrine:migrations:migrate --no-interac
 ### 6. Access the Application
 Visit the app in your browser: http://localhost:8082/
 
+1. Create a account http://localhost:8082/register
+2. A verification link will be available in console. "Activation Link {link}"
+3. Once verified login here http://localhost:8082/login
+4. Create list, and add items to the lists
+5. You can edit, mark item as complete and delete the item as well
+6. Sort by name and date also available for items
+
+
 
