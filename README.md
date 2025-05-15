@@ -53,4 +53,3 @@ docker exec -it symfony_php bin/console doctrine:migrations:migrate --no-interac
 Visit the app in your browser: http://localhost:8082/
 
 
->>>>>>> 5362365 (Initial Commit)
