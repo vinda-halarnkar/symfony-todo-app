@@ -28,7 +28,7 @@ cd symfony-todo
 
 ### 2. Set Up Environment Variables
 ```bash
-cp .env .env.example
+cp .env.example .env 
 ```
 
 ### 3. Build and Start Docker Containers
