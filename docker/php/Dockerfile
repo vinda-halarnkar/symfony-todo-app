@@ -15,5 +15,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # SET USER PERMISSIONS FOR COPIED APP.
 RUN chown -R www-data:www-data /var/www/html
 
+RUN git config --global --add safe.directory /var/www/html
+
 WORKDIR /var/www/html
 
