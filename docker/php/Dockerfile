@@ -12,10 +12,12 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# SET USER PERMISSIONS FOR COPIED APP.
-RUN chown -R www-data:www-data /var/www/html
-
-RUN git config --global --add safe.directory /var/www/html
+# Create directory and fix ownership
+RUN mkdir -p /var/www/html \
+    && chown -R www-data:www-data /var/www/html
 
 WORKDIR /var/www/html
+
+# Optional: avoid Git safe directory error
+RUN git config --global --add safe.directory /var/www/html
 
