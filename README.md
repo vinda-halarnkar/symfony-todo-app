@@ -23,7 +23,7 @@ Make sure the following are installed on your machine:
 
 ```bash
 git clone git@github.com:vinda-halarnkar/symfony-todo-app.git
-cd symfony-todo
+cd symfony-todo-app
 ```
 
 ### 2. Set Up Environment Variables
@@ -46,6 +46,8 @@ docker exec -it symfony_php composer install
 ### 5. Database & Migrations
 ```bash
 docker exec -it symfony_php bin/console make:migration
+```
+```bash
 docker exec -it symfony_php bin/console doctrine:migrations:migrate --no-interaction
 ```
 
