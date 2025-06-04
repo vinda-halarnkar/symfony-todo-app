@@ -54,7 +54,11 @@ final class AuthController extends AbstractController
             // Send email with activation link
             $activationLink = $this->generateUrl('app_verify_email', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
             
-            error_log('Activation link: '.date('Y-m-d H:i:s') . print_r($activationLink, true));
+            error_log('############################## Activation link ##################################');
+
+            error_log('Activation link : '.date('Y-m-d H:i:s') . print_r($activationLink, true));
+
+            error_log('############################## Activation link ##################################');
 
             return $this->redirectToRoute('app_login');
         }
